@@ -1,10 +1,60 @@
 LCMPROJECT
 ==========
-I developed a Grails application for a company called LCM that specializes in repairing
-electrical equipment for large companies and factories. LCM repairs large scale electrical
-equipment by monitoring their heat and vibration outputs. The company produces pdf reports
-that contain information about specific machines and their problems complete with detailed
-photos.
+ I developed a Grails application for a company called LCM(an imaginary company) that specializes in repairing electrical equipment for large companies and factories. LCM repairs large scale electrical equipment by monitoring their heat and vibration outputs. The company produces pdf reports that contain information about specific machines and their problems complete with detailed photos.
+Domain:
+I started by created a new Grails project and named it lcm_mithuna. First I created three domain- Company.groovy, Location.groovy, Report.groovy, with field names
+
+	Company.groovy
+		nameOfCompany
+	Location.groovy 
+		nameOfLocation
+		address 
+		companyName(belongsTo) 
+	Report.groovy 
+		nameOfReport
+		locationName (belongsTo) 
+		publication Date 
+		field (grad Ext)
+
+Location.groovy has a companyName which belongs to Company.groovy and Report.groovy has a field locationName which belongs to Location.groovy.
+ belongsTo defines a "belongs to" relationship where the class specified by belongsTo assumes ownership of the relationship [1]. 
+I also set constraints for each field in Domain. 
+static constraints = {
+		nameOfReport(blank:false)
+		field(blank:false)
+    }
+
+Controller:
+I created three controllers corresponding to three Domains- CompanyController.groovy, LocationController.groovy, ReportController.groovy.
+I used def scaffold = true in all the controllers. 
+	As a part of graduate Extension, I was asked to create another controller that controls the routing between two actions. I named this controller RouterController.groovy. I was not able to do scaffolding for this Controller as it does not have a domain. But I created a function “upload”, which is linked with the view of this controller.
+
+View:
+	When I did ‘scaffolding = true’ in the controllers, the magic IDE eclipse-grails automatically created corresponding views for me. 
+	Since I didn’t scaffold RouterController, I created a view for it named upload.gsp. GSP is Groovy Server Page. This upload.gsp has a form for uploading the file. I used 
+<g:uploadForm action="upload" method="post">
+This form has a field for selecting “Location” from the list of saved Locations and a field to upload a file. This form action will invoke our controller and inside the controller, I first retrieve the file using command
+request.getFile('uploadFile')
+And then checks whether file is empty. If empty the view page upload will be displayed again with a flash message. If not that file will be saved to a directory using command
+f.transferTo(new File('file path’));
+I also checked if the file extension is ‘pdf’. If not I displayed a flash message and render to upload view. Else I redirect to list of ReportController.
+index.gsp:
+	I customized the index.gsp page by removing the side bar containing Application Status and Installed Plugins which is no significance in my project. I also included marketing information about the company LCM. I also moved the controller information from the bottom of the page to the left of the page for more visibility and easy access. 
+	I used CSS3 to style my index page.
+
+404error.gsp:
+
+	I created an error page which will load an image (cupid.png) when a 404 error occurs. 
+	I then changed error section of the UrlMappings.groovy page to 
+
+		"404"(view:'/404error')
+	UrlMapping is used to map different views.
+Main.gsp:
+	
+Inside main.gsp, I removed the grails logo from banner and replaced it with LCM logo.
+Main.css
+	I made many changes to the main.css file to make the page look beautiful. I changed the color and the banner and the body.  I moved the controller tab from the bottom of the page to the left side and aligned it beautifully using css.
+
 I added spring security plugin to the grails application.
 
 compile ':spring-security-core:1.2.7.3'
@@ -18,24 +68,24 @@ compile ":famfamfam:1.0.1"
 So now I have 
 Domain: 
 	Company.groovy
-	nameOfCompany
+		nameOfCompany
 	Location.groovy
-	nameOfLocation
-	address
-	companyName(belongsTo)
+		nameOfLocation
+		address
+		companyName(belongsTo)
 	Report.groovy
-	nameOfReport
-	locationName (belongsTo)
-	publication Date	
+		nameOfReport
+		locationName (belongsTo)
+		publication Date	
 	User
-	username
-	password
-	companyNameforUser
+		username
+		password
+		companyNameforUser
 	Role
-	authority
+		authority
 	UserRole
-	user
-	role
+		user
+		role
 Controller:
 lcm_a20295703
 	CompanyController.groovy,
@@ -81,10 +131,10 @@ Which helps in creating a link for login and logout and also redirects to login 
 USER CREDENTIALS:
 Admin
 Username	:	admin
-Password	:	password
+Password	:	********
 Sample User
 Username	:	sampleUser
-Password	:	password
+Password	:	********
 
 
 Now I created a new controller (not generate) to include report functionality and named it ReportController. I included 
