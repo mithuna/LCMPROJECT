@@ -175,3 +175,7 @@ In order to display the reports in chronological order, I used a sort() function
 FUTURE IMPLEMENTATIONS:
 I would like to add an edit page for the report controller.
 
+
+
+Reference:
+[1] http://grails.org/doc/latest/
